@@ -1,0 +1,68 @@
+menu "GNSS PTP grandmaster"
+
+    menu "Pins"
+        # Defaults chosen from GPIOs not used by Ethernet, codec, SD, C6 SDIO, console,
+        # USB or strapping on the Waveshare ESP32-P4-ETH. Check against the header silkscreen.
+
+        config GM_GNSS_UART_NUM
+            int "GNSS UART port"
+            default 1
+            range 1 4
+
+        config GM_GNSS_UART_BAUD
+            int "GNSS UART baud rate"
+            default 460800
+            help
+                LG290P defaults to 460800; u-blox M8T defaults to 9600.
+
+        config GM_GNSS_RX_GPIO
+            int "GPIO for GNSS TXD -> P4 RX"
+            default 21
+
+        config GM_GNSS_TX_GPIO
+            int "GPIO for P4 TX -> GNSS RXD"
+            default 20
+
+        config GM_GNSS_PPS_GPIO
+            int "GPIO for GNSS PPS input (capture channel 0)"
+            default 22
+
+        config GM_PPS_OUT_GPIO
+            int "GPIO for EMAC PPS output"
+            default 23
+
+        config GM_PPS_LOOP_GPIO
+            int "GPIO for EMAC PPS loopback input (capture channel 1)"
+            default 32
+            help
+                Wire the PPS output pin to this pin. Capturing the real pin edge puts
+                the GPIO matrix and pad delay inside the measurement.
+    endmenu
+
+    menu "PTP clock"
+        choice GM_PTP_CLK_SRC
+            prompt "EMAC PTP clock source"
+            default GM_PTP_CLK_SRC_PLL_F80M
+
+            config GM_PTP_CLK_SRC_XTAL
+                bool "XTAL (40 MHz, 25 ns)"
+            config GM_PTP_CLK_SRC_PLL_F80M
+                bool "PLL_F80M (80 MHz, 12.5 ns)"
+        endchoice
+
+        config GM_PTP_REQUIRED_ACCURACY_NS
+            int "Timestamp increment (ns), must be coarser than the clock period"
+            default 20
+            range 2 255
+    endmenu
+
+    menu "Bring-up (M0)"
+        config GM_M0_TX_PROBE
+            bool "Send a timestamped PTP Signaling probe every second"
+            default y
+            help
+                Sends a Signaling message on the PTP general port with domain 99 so it
+                is ignored by real PTP devices, and logs its hardware TX timestamp.
+    endmenu
+
+endmenu

@@ -36,7 +36,7 @@ Checked against ESP-IDF `master`, `scrambletools/esp_ptp` 1.6.0 and `DatanoiseTV
 
 | Qty | Item | Why | ~Price |
 |---|---|---|---|
-| 2 | Waveshare **ESP32-P4-ETH** (one PoE variant) | DUT plus a spare/second node | $20–28 each |
+| 2 | Waveshare **ESP32-P4-ETH** (one PoE variant), **chip revision v3.x** | DUT plus a spare/second node. The EMAC PPS output only exists on P4 v3+ silicon, so confirm with the seller | $20–28 each |
 | 1 | **SparkFun LG290P breakout** (GPS-26620) | Timing receiver, 5 ns RMS PPS | $190 |
 | 1 | *(fallback)* u-blox NEO/LEA-M8T board | Well-documented qErr (`UBX-TIM-TP`) if the LG290P timing features fall short | $70–120 |
 | 1 | Multi-band active GNSS antenna and cable | — | $40–80 |
@@ -150,7 +150,7 @@ stage (one-shot stretcher plus 50 Ω driver if PPS0 is too narrow), and PoE PD.
 | GPIO-matrix input synchronizer adds jitter | Average it out in the loop; measure in M1 |
 | LG290P lacks a qErr equivalent | Accept ~5–10 ns extra jitter (the loop filters it) or fall back to M8T/F9T |
 | 100 Mbit PHY latency variation | Characterize in M2; the 2nd-gen PCB could consider the DP83640 route |
-| P4 silicon revision differences | Record the revision in telemetry; test on what we buy |
+| P4 silicon revision: **EMAC PPS out needs v3.x** (IDF v6.1 Kconfig) | Buy v3 boards; on v1.x, fall back to the target-time interrupt toggling a GPIO (more jitter) |
 
 ## 7. Open decisions
 
