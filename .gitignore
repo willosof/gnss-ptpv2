@@ -1,0 +1,27 @@
+# ESP-IDF
+build/
+sdkconfig
+sdkconfig.old
+managed_components/
+dependencies.lock
+
+# KiCad
+*-backups/
+*.kicad_prl
+fp-info-cache
+_autosave-*
+*.lck
+
+# Python / tools
+__pycache__/
+.venv/
+*.pyc
+
+# Captures and logs (large; keep summaries in docs/)
+captures/
+*.log
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
